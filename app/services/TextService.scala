@@ -17,16 +17,19 @@ trait TextService {
 class WaitingTextService extends TextService {
   private lazy val logger = Logger(this.getClass)
 
-  def transformContent(text: String): Future[ResultText] = {
+  private val twoSeconds = 2000L
+  private val threeSeconds = 3000L
+
+  def transformContent(text: String) : Future[ResultText] = {
     logger.info("This will take three seconds for all async work to finish.")
 
     val reverseText = async {
-      Thread.sleep(2000) // simulating long taking call
+      Thread.sleep(twoSeconds) // simulating long taking call
       text.reverse
     }
 
     val doubleText = async {
-      Thread.sleep(3000) // simulating long taking call
+      Thread.sleep(threeSeconds) // simulating long taking call
       text + text
     }
     sequence(Seq(doubleText, reverseText)).map(list => ResultText(list))

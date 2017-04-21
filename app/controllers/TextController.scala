@@ -12,7 +12,7 @@ import scala.concurrent.Future
 @Singleton
 class TextController @Inject()(textService: TextService) extends Controller {
 
-  def test = Action.async(BodyParsers.parse.json) {
+  def test(): Action[JsValue] = Action.async(BodyParsers.parse.json) {
     request => {
       request.body.validate[Text] match {
         case JsSuccess(text, _) => textService.transformContent(text.content).map(result => Ok(Json.toJson(result)))
